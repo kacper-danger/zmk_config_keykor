@@ -17,7 +17,7 @@ kscan0: kscan0 {
     };
 
 // Label of the kscan node in the dtsi
-&kscan0 {
+
     col-gpios = 
             <&pro_micro 4 GPIO_ACTIVE_HIGH>,
             <&pro_micro 3 GPIO_ACTIVE_HIGH>,
@@ -25,5 +25,5 @@ kscan0: kscan0 {
             <&pro_micro 10 GPIO_ACTIVE_HIGH>, 
             <&pro_micro 0 GPIO_ACTIVE_HIGH>,
             <&pro_micro 1 GPIO_ACTIVE_HIGH>;
-};
+
 };
