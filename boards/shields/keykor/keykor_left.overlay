@@ -1,6 +1,6 @@
 #include "keykor.dtsi" // The shared dtsi file is included in the overlay
 #include <zephyr/dt-bindings/gpio/gpio.h>
-
+/ {
 kscan0: kscan0 {
         compatible = "zmk,kscan-gpio-matrix";
         diode-direction = "col2row";
@@ -25,4 +25,5 @@ kscan0: kscan0 {
             <&pro_micro 10 GPIO_ACTIVE_HIGH>, 
             <&pro_micro 0 GPIO_ACTIVE_HIGH>,
             <&pro_micro 1 GPIO_ACTIVE_HIGH>;
+};
 };
