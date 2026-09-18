@@ -1,5 +1,5 @@
 #include "keykor.dtsi" // The shared dtsi file is included in the overlay
-#include <zephyr/dt-bindings/gpio/gpio.h>
+
 / {
 kscan0: kscan0 {
         compatible = "zmk,kscan-gpio-matrix";
