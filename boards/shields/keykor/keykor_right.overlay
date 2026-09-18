@@ -1,12 +1,10 @@
 #include "keykor.dtsi" // The shared dtsi file is included in the overlay
 
-/ {
-
-&default_transform { // Offset of 6 because the left side has 6 columns
-    col-offset = <6>;
-    row-offset = <5>;
+&default_transform {
+    col-offset = <6>;   // left half has 6 columns, so the right half starts at column 6
 };
 
+/ {
     kscan0: kscan0 {
         compatible = "zmk,kscan-gpio-matrix";
         diode-direction = "col2row";
@@ -20,15 +18,13 @@
             , <&pro_micro 10 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
             ;
 
-
-// Label of the kscan node in the dtsi
-
-    col-gpios = 
-            <&pro_micro 1 GPIO_ACTIVE_HIGH>,
-            <&pro_micro 0 GPIO_ACTIVE_HIGH>,
-            <&pro_micro 2 GPIO_ACTIVE_HIGH>,
-            <&pro_micro 3 GPIO_ACTIVE_HIGH>, 
-            <&pro_micro 4 GPIO_ACTIVE_HIGH>,
-            <&pro_micro 5 GPIO_ACTIVE_HIGH>;
-};
+        col-gpios
+            = <&pro_micro 1 GPIO_ACTIVE_HIGH>
+            , <&pro_micro 0 GPIO_ACTIVE_HIGH>
+            , <&pro_micro 2 GPIO_ACTIVE_HIGH>
+            , <&pro_micro 3 GPIO_ACTIVE_HIGH>
+            , <&pro_micro 4 GPIO_ACTIVE_HIGH>
+            , <&pro_micro 5 GPIO_ACTIVE_HIGH>
+            ;
+    };
 };
