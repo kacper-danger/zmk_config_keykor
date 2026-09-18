@@ -24,3 +24,5 @@ include:
     shield: keykor_left
   - board: nice_nano_v2
     shield: keykor_right
+    board: nice_nano_v2
+    shield: settings_reset
