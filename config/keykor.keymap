@@ -53,8 +53,8 @@ lower_layer {
 
     &none &none &none &none &none &none                                                             &none &none &none &none &none &none 
     &none &none             &none       &none      &none         &none                                 &none           &none             &none             &none           &none  &none
-    &none &kp TAB          &none       &none     &kp LG(LS(N4))     &kp CAPS                              &kp MINUS        &kp EQUAL         &kp LBKT         &kp RBKT        &td11  &none
-    &none &kp DEL          &none       &none     &none         &none                                 &kp UNDER        &kp PLUS          &kp LBRC         &kp RBRC        &td12 &none
+    &none &kp TAB          &none       &none     &none    &kp CAPS                              &kp MINUS        &kp EQUAL         &kp LBKT         &kp RBKT        &none  &none
+    &none &kp DEL          &none       &none     &none         &none                                 &kp UNDER        &kp PLUS          &kp LBRC         &kp RBRC        &none &none
                                  &kp LGUI  &mo 1         &kp RET                               &kp RET          &mo 2             &kp RALT
     >;
     };
