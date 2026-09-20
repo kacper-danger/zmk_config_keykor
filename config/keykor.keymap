@@ -148,11 +148,11 @@ extra6 {
 
 &trackpad_listener {
     // Any trackpad activity switches on the mouse layer for 2 s after the last movement
-    input-processors = <&zip_xy_transform TRACKPAD_ORIENT &zip_temp_layer MOUSE 2000>;
+    input-processors = <&zip_xy_transform TRACKPAD_ORIENT &zip_temp_layer MOUSE 600>;
 
     // While the scroll layer is active, pad movement becomes scrolling
     scroller {
         layers = <SCROLL>;
-        input-processors = <&zip_xy_transform TRACKPAD_ORIENT &zip_xy_to_scroll_mapper &zip_scroll_scaler 1 8>;
+        input-processors = <&zip_xy_transform TRACKPAD_ORIENT &zip_xy_to_scroll_mapper &zip_scroll_scaler 1 16>;
     };
 };
