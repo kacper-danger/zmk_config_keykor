@@ -27,5 +27,7 @@ include:
     artifact-name: keykor_left_with_studio
   - board: nice_nano//zmk
     shield: keykor_right
+    artifact-name: keykor_right
   - board: nice_nano//zmk
     shield: settings_reset
+    artifact-name: settings_reset
