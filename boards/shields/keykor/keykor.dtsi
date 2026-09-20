@@ -55,3 +55,23 @@
             PHYS_KEY(700,400),PHYS_KEY(800,400),  PHYS_KEY(900,400);
     };
 };
+
+// Trackpad events travel from the right half (peripheral) to the left half (central)
+/ {
+    split_inputs {
+        #address-cells = <1>;
+        #size-cells = <0>;
+
+        trackpad_split: trackpad@0 {
+            compatible = "zmk,input-split";
+            reg = <0>;
+        };
+    };
+
+    // Disabled here so the keymap can reference it on both builds; enabled on the central in keykor_left.overlay
+    trackpad_listener: trackpad_listener {
+        compatible = "zmk,input-listener";
+        status = "disabled";
+        device = <&trackpad_split>;
+    };
+};

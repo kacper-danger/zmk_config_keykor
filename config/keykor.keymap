@@ -2,10 +2,14 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/ext_power.h>
 #include <behaviors.dtsi>
+#include <dt-bindings/zmk/pointing.h>
+#include <input/processors.dtsi>
 
 #define BASE 0
 #define LOWER 1
 #define UPPER 2
+#define MOUSE 3
+#define SCROLL 4
 
 
 
@@ -93,6 +97,31 @@ display-name = "UPPER";
     };
 
 
+mouse_layer {
+    display-name = "MOUSE";
+    // Auto-activated by trackpad movement (see &trackpad_listener below).
+    // Left half: S = middle click, D = right click, F = left click, G (hold) = scroll mode
+    bindings = <
+    &trans &trans &trans        &trans        &trans        &trans              &trans &trans &trans &trans &trans &trans
+    &trans &trans &trans        &trans        &trans        &trans              &trans &trans &trans &trans &trans &trans
+    &trans &trans &mkp MCLK     &mkp RCLK     &mkp LCLK     &mo SCROLL          &trans &trans &trans &trans &trans &trans
+    &trans &trans &trans        &trans        &trans        &trans              &trans &trans &trans &trans &trans &trans
+                                &trans        &trans        &trans              &trans &trans &trans
+    >;
+};
+
+scroll_layer {
+    display-name = "SCROLL";
+    // Only exists so the listener can switch processors while it is active
+    bindings = <
+    &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
+    &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
+    &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
+    &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
+                  &trans &trans &trans          &trans &trans &trans
+    >;
+};
+
 extra4 {
             status = "reserved";
         };
@@ -111,4 +140,15 @@ extra6 {
 
 
 };
+};
+
+&trackpad_listener {
+    // Any trackpad activity switches on the mouse layer for 600 ms
+    input-processors = <&zip_temp_layer MOUSE 600>;
+
+    // While the scroll layer is active, pad movement becomes scrolling
+    scroller {
+        layers = <SCROLL>;
+        input-processors = <&zip_xy_to_scroll_mapper &zip_scroll_scaler 1 8>;
+    };
 };

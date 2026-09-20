@@ -28,3 +28,48 @@
             ;
     };
 };
+
+// ---- Cirque Pinnacle trackpad (SPI) ----
+// Pin names -> nRF52840 port/pin (nice!nano pro_micro map; verify for your clone):
+//   SCK D21 = P0.04, SI/MOSI D20 = P0.02, SO/MISO D19 = P0.29, SS D18 = P0.31, DR D15 = P1.13
+&pinctrl {
+    spi1_default: spi1_default {
+        group1 {
+            psels = <NRF_PSEL(SPIM_SCK, 0, 4)>,
+                    <NRF_PSEL(SPIM_MOSI, 0, 2)>,
+                    <NRF_PSEL(SPIM_MISO, 0, 29)>;
+        };
+    };
+
+    spi1_sleep: spi1_sleep {
+        group1 {
+            psels = <NRF_PSEL(SPIM_SCK, 0, 4)>,
+                    <NRF_PSEL(SPIM_MOSI, 0, 2)>,
+                    <NRF_PSEL(SPIM_MISO, 0, 29)>;
+            low-power-enable;
+        };
+    };
+};
+
+&spi1 {
+    status = "okay";
+    compatible = "nordic,nrf-spim";
+    pinctrl-0 = <&spi1_default>;
+    pinctrl-1 = <&spi1_sleep>;
+    pinctrl-names = "default", "sleep";
+    cs-gpios = <&pro_micro 18 GPIO_ACTIVE_LOW>;
+
+    trackpad: trackpad@0 {
+        compatible = "cirque,pinnacle";
+        reg = <0>;
+        spi-max-frequency = <1000000>;
+        status = "okay";
+        dr-gpios = <&pro_micro 15 GPIO_ACTIVE_HIGH>;
+        data-mode = "relative";
+        // primary-tap-enable;   // tap-to-click, once the basics work
+    };
+};
+
+&trackpad_split {
+    device = <&trackpad>;
+};
