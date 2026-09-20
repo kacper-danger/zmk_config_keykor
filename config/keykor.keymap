@@ -6,11 +6,24 @@
 #define BASE 0
 #define LOWER 1
 #define UPPER 2
+#define EXTRA 4
+#define EXTRA 5 
+#define EXTRA 6 
 
 
 /  {
 
-
+behaviours {
+    
+    hm: homerow_mods {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            quick-tap-ms = <0>;
+            flavor = "tap-preferred";
+            bindings = <&kp>, <&kp>;
+        };
+}
 keymap {
     compatible = "zmk,keymap";
 
@@ -79,6 +92,20 @@ display-name = "UPPER";
                                      &kp LGUI         &mo 1             &kp RET                          &kp RET    &mo 2     &kp RALT
     >;
     };
+
+
+extra4 {
+            status = "reserved";
+        };
+
+extra5 {
+            status = "reserved";
+        };    
+        
+extra6 {
+            status = "reserved";
+        };
+
 
 
 
