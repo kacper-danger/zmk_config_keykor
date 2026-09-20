@@ -30,22 +30,23 @@
 };
 
 // ---- Cirque Pinnacle trackpad (SPI) ----
-// Pin names -> nRF52840 port/pin (nice!nano pro_micro map; verify for your clone):
-//   SCK D21 = P0.04, SI/MOSI D20 = P0.02, SO/MISO D19 = P0.29, SS D18 = P0.31, DR D15 = P1.13
+// Your pinout -> nRF52840 port/pin (ZMK nice!nano pro_micro map; pinctrl needs the raw pins):
+//   SCK D21 = P0.31, SI/MOSI D20 = P0.29, SO/MISO D19 = P0.02
+//   SS D18 and DR D15 are set below with &pro_micro 18 / &pro_micro 15 (P1.15 / P1.13)
 &pinctrl {
     spi1_default: spi1_default {
         group1 {
-            psels = <NRF_PSEL(SPIM_SCK, 0, 4)>,
-                    <NRF_PSEL(SPIM_MOSI, 0, 2)>,
-                    <NRF_PSEL(SPIM_MISO, 0, 29)>;
+            psels = <NRF_PSEL(SPIM_SCK, 0, 21)>,
+                    <NRF_PSEL(SPIM_MOSI, 0, 20)>,
+                    <NRF_PSEL(SPIM_MISO, 0, 19)>;
         };
     };
 
     spi1_sleep: spi1_sleep {
         group1 {
-            psels = <NRF_PSEL(SPIM_SCK, 0, 4)>,
-                    <NRF_PSEL(SPIM_MOSI, 0, 2)>,
-                    <NRF_PSEL(SPIM_MISO, 0, 29)>;
+            psels = <NRF_PSEL(SPIM_SCK, 0, 21)>,
+                    <NRF_PSEL(SPIM_MOSI, 0, 20)>,
+                    <NRF_PSEL(SPIM_MISO, 0, 19)>;
             low-power-enable;
         };
     };
@@ -66,7 +67,6 @@
         status = "okay";
         dr-gpios = <&pro_micro 15 GPIO_ACTIVE_HIGH>;
         data-mode = "relative";
-        // primary-tap-enable;   // tap-to-click, once the basics work
     };
 };
 

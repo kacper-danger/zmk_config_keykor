@@ -4,11 +4,17 @@ manifest:
   remotes:
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
-    # Additional modules containing boards/shields/custom code can be listed here as well
-    # See https://docs.zephyrproject.org/3.2.0/develop/west/manifest.html#projects
+    - name: petejohanson
+      url-base: https://github.com/petejohanson
   projects:
     - name: zmk
       remote: zmkfirmware
       import: app/west.yml
+    # Cirque Pinnacle driver (ZMK v0.3 / Zephyr 3.5 has no in-tree driver).
+    # Needs its own revision: the default v0.3 tag does not exist in this repo.
+    - name: cirque-input-module
+      remote: petejohanson
+      revision: main
   self:
     path: config
+ 
