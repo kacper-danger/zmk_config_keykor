@@ -1,20 +1,18 @@
 manifest:
-  defaults:
-    revision: v0.3
   remotes:
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
-    - name: petejohanson
-      url-base: https://github.com/petejohanson
+    - name: nxtkb
+      url-base: https://github.com/nxtkb
   projects:
     - name: zmk
       remote: zmkfirmware
+      revision: main
       import: app/west.yml
-    # Cirque Pinnacle driver (ZMK v0.3 / Zephyr 3.5 has no in-tree driver).
-    # Needs its own revision: the default v0.3 tag does not exist in this repo.
+    # Fork of petejohanson/cirque-input-module (edge scroll, taps, runtime speed keys).
+    # Uses compatible "cirque,pinnacle2" so it does not clash with Zephyr's in-tree "cirque,pinnacle".
     - name: cirque-input-module
-      remote: petejohanson
+      remote: nxtkb
       revision: main
   self:
     path: config
- 

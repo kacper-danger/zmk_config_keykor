@@ -34,7 +34,8 @@
 //   SCK D21 = P0.31, SI/MOSI D20 = P0.29, SO/MISO D19 = P0.02
 //   SS D18 and DR D15 are set below with &pro_micro 18 / &pro_micro 15 (P1.15 / P1.13)
 &pinctrl {
-    spi1_default: spi1_default {
+    // New labels (not the board's spi1_default) so this does not depend on the board's pinctrl names
+    trackpad_spi_default: trackpad_spi_default {
         group1 {
             psels = <NRF_PSEL(SPIM_SCK, 0, 31)>,
                     <NRF_PSEL(SPIM_MOSI, 0, 29)>,
@@ -42,7 +43,7 @@
         };
     };
 
-    spi1_sleep: spi1_sleep {
+    trackpad_spi_sleep: trackpad_spi_sleep {
         group1 {
             psels = <NRF_PSEL(SPIM_SCK, 0, 31)>,
                     <NRF_PSEL(SPIM_MOSI, 0, 29)>,
@@ -55,18 +56,30 @@
 &spi1 {
     status = "okay";
     compatible = "nordic,nrf-spim";
-    pinctrl-0 = <&spi1_default>;
-    pinctrl-1 = <&spi1_sleep>;
+    pinctrl-0 = <&trackpad_spi_default>;
+    pinctrl-1 = <&trackpad_spi_sleep>;
     pinctrl-names = "default", "sleep";
     cs-gpios = <&pro_micro 18 GPIO_ACTIVE_LOW>;
 
-  trackpad: trackpad@0 {
-    compatible = "cirque,pinnacle";
-    reg = <0>;
-    spi-max-frequency = <1000000>;
-    status = "okay";
-    dr-gpios = <&pro_micro 15 GPIO_ACTIVE_HIGH>;
-};
+    trackpad: trackpad@0 {
+        compatible = "cirque,pinnacle2";
+        reg = <0>;
+        spi-max-frequency = <1000000>;
+        status = "okay";
+        data-ready-gpios = <&pro_micro 15 GPIO_ACTIVE_HIGH>;
+
+        data-mode = "absolute";            // "relative" = the chip's stock behavior
+        absolute-relative-divisor = <8>;   // cursor speed: bigger = slower
+        absolute-touch-min-z = <1>;
+        primary-tap-enable;                // tap to click
+        absolute-right-edge-scroll-enable; // right edge = vertical scroll
+        absolute-top-edge-scroll-enable;   // top edge = horizontal scroll
+        sleep-mode-enable;
+
+        // Pad is mounted rotated 90 degrees; Y is inverted in the keymap (driver ignores invert-y in absolute mode)
+        swap-xy;
+        invert-x;
+    };
 };
 
 &trackpad_split {

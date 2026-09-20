@@ -10,10 +10,18 @@
 #define LOWER 1
 #define UPPER 2
 #define MOUSE 3
-#define SCROLL 4
 
-// Pad is mounted rotated 90 degrees: swap X/Y and invert both axes to correct it
-#define TRACKPAD_ORIENT (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)
+// Cirque runtime speed / mode bindings (from the module README)
+#define SPEED_POINTER 0
+#define SPEED_SCROLL 1
+#define SPEED_PREV 0
+#define SPEED_NEXT 1
+#define SPEED_RESET 2
+#define SPEED_FINE_PREV 3
+#define SPEED_FINE_NEXT 4
+#define CIRQUE_MODE_RELATIVE 0
+#define CIRQUE_MODE_ABSOLUTE 1
+#define CIRQUE_MODE_TOGGLE 2
 
 
 
@@ -104,25 +112,14 @@ display-name = "UPPER";
 mouse_layer {
     display-name = "MOUSE";
     // Auto-activated by trackpad movement (see &trackpad_listener below).
-    // Left half: S = middle click, D = right click, F = left click, G (hold) = scroll mode
+    // Left half: S = middle click, D = right click, F = left click, G (hold) = scroll with pad movement
+    // Bottom row: Z = toggle relative/absolute, X/C = pointer speed down/up, V/B = scroll speed down/up
     bindings = <
     &trans &trans &trans        &trans        &trans        &trans              &trans &trans &trans &trans &trans &trans
     &trans &trans &trans        &trans        &trans        &trans              &trans &trans &trans &trans &trans &trans
-    &trans &trans &mkp MCLK     &mkp RCLK     &mkp LCLK     &mo SCROLL          &trans &trans &trans &trans &trans &trans
-    &trans &trans &trans        &trans        &trans        &trans              &trans &trans &trans &trans &trans &trans
+    &trans &trans &mkp MCLK     &mkp RCLK     &mkp LCLK     &drgscrl            &trans &trans &trans &trans &trans &trans
+    &trans &crq_mode CIRQUE_MODE_TOGGLE &ptr_spd SPEED_POINTER SPEED_PREV &ptr_spd SPEED_POINTER SPEED_NEXT &ptr_spd SPEED_SCROLL SPEED_PREV &ptr_spd SPEED_SCROLL SPEED_NEXT   &trans &trans &trans &trans &trans &trans
                                 &trans        &trans        &trans              &trans &trans &trans
-    >;
-};
-
-scroll_layer {
-    display-name = "SCROLL";
-    // Only exists so the listener can switch processors while it is active
-    bindings = <
-    &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
-    &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
-    &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
-    &trans &trans &trans &trans &trans &trans   &trans &trans &trans &trans &trans &trans
-                  &trans &trans &trans          &trans &trans &trans
     >;
 };
 
@@ -147,12 +144,53 @@ extra6 {
 };
 
 &trackpad_listener {
-    // Any trackpad activity switches on the mouse layer for 2 s after the last movement
-    input-processors = <&zip_xy_transform TRACKPAD_ORIENT &zip_temp_layer MOUSE 600>;
+    // Any trackpad activity switches on the mouse layer for 2 s after the last movement.
+    // Y_INVERT completes the rotation fix (DT swap-xy + invert-x + this).
+    input-processors = <&zip_temp_layer MOUSE 2000
+                        &zip_xy_transform INPUT_TRANSFORM_Y_INVERT
+                        &pointer_processor 0 0
+                        &drag_scroll_processor 1 8>;
+};
 
-    // While the scroll layer is active, pad movement becomes scrolling
-    scroller {
-        layers = <SCROLL>;
-        input-processors = <&zip_xy_transform TRACKPAD_ORIENT &zip_xy_to_scroll_mapper &zip_scroll_scaler 1 16>;
+/ {
+    // Pointer speed / scroll speed processors (module). 1x base speed; tune one-x-* or use the &ptr_spd keys.
+    pointer_processor: pointer_processor {
+        compatible = "zmk,input-processor-pointer-speed";
+        #input-processor-cells = <2>;
+        track-remainders;
+        one-x-multiplier = <1>;
+        one-x-divisor = <1>;
+        min-percent = <10>;
+        max-percent = <400>;
+        initial-speed-position = <50>;
+    };
+
+    drag_scroll_processor: drag_scroll_processor {
+        compatible = "zmk,input-processor-drag-scroll";
+        #input-processor-cells = <2>;
+        track-remainders;
+        one-x-multiplier = <1>;
+        one-x-divisor = <1>;
+        min-percent = <10>;
+        max-percent = <1000>;
+        initial-speed-position = <50>;
+        // invert-scroll;   // uncomment if scroll direction is reversed
+    };
+
+    behaviors {
+        drgscrl: drag_scroll {
+            compatible = "zmk,behavior-drag-scroll";
+            #binding-cells = <0>;
+        };
+
+        ptr_spd: pointing_speed {
+            compatible = "zmk,behavior-pointing-speed";
+            #binding-cells = <2>;
+        };
+
+        crq_mode: cirque_mode {
+            compatible = "zmk,behavior-cirque-mode";
+            #binding-cells = <1>;
+        };
     };
 };

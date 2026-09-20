@@ -20,12 +20,12 @@
 ---
 include:
  
-  - board: nice_nano_v2
+  - board: nice_nano//zmk
     shield: keykor_left
     snippet: studio-rpc-usb-uart
     cmake-args: -DCONFIG_ZMK_STUDIO=y
     artifact-name: keykor_left_with_studio
-  - board: nice_nano_v2
+  - board: nice_nano//zmk
     shield: keykor_right
-  - board: nice_nano_v2
+  - board: nice_nano//zmk
     shield: settings_reset
