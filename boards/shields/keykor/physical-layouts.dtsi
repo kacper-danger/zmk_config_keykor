@@ -10,7 +10,7 @@
  */
 
 #include <dt-bindings/zmk/matrix_transform.h>
-#include <physical_layouts.dtsi>
+#include <physical-layouts.dtsi>
 
 / {
     default_transform: matrix_transform {
