@@ -4,12 +4,16 @@
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/pointing.h>
 #include <input/processors.dtsi>
+#include <dt-bindings/zmk/input_transform.h>
 
 #define BASE 0
 #define LOWER 1
 #define UPPER 2
 #define MOUSE 3
 #define SCROLL 4
+
+// Pad is mounted rotated 90 degrees: swap X/Y and invert both axes to correct it
+#define TRACKPAD_ORIENT (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)
 
 
 
@@ -143,12 +147,12 @@ extra6 {
 };
 
 &trackpad_listener {
-    // Any trackpad activity switches on the mouse layer for 600 ms
-    input-processors = <&zip_temp_layer MOUSE 600>;
+    // Any trackpad activity switches on the mouse layer for 2 s after the last movement
+    input-processors = <&zip_xy_transform TRACKPAD_ORIENT &zip_temp_layer MOUSE 2000>;
 
     // While the scroll layer is active, pad movement becomes scrolling
     scroller {
         layers = <SCROLL>;
-        input-processors = <&zip_xy_to_scroll_mapper &zip_scroll_scaler 1 8>;
+        input-processors = <&zip_xy_transform TRACKPAD_ORIENT &zip_xy_to_scroll_mapper &zip_scroll_scaler 1 8>;
     };
 };
