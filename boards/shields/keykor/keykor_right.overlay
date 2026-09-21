@@ -62,12 +62,11 @@
     cs-gpios = <&pro_micro 18 GPIO_ACTIVE_LOW>;
 
     trackpad: trackpad@0 {
-        compatible = "cirque,pinnacle2";
+        compatible = "cirque,pinnacle";   // Zephyr's in-tree driver (SPI supported)
         reg = <0>;
         spi-max-frequency = <1000000>;
         status = "okay";
         data-ready-gpios = <&pro_micro 15 GPIO_ACTIVE_HIGH>;
-        data-mode = "relative";
     };
 };
 
