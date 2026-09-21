@@ -67,18 +67,7 @@
         spi-max-frequency = <1000000>;
         status = "okay";
         data-ready-gpios = <&pro_micro 15 GPIO_ACTIVE_HIGH>;
-
-        data-mode = "absolute";            // "relative" = the chip's stock behavior
-        absolute-relative-divisor = <8>;   // cursor speed: bigger = slower
-        absolute-touch-min-z = <1>;
-        primary-tap-enable;                // tap to click
-        absolute-right-edge-scroll-enable; // right edge = vertical scroll
-        absolute-top-edge-scroll-enable;   // top edge = horizontal scroll
-        sleep-mode-enable;
-
-        // Pad is mounted rotated 90 degrees; Y is inverted in the keymap (driver ignores invert-y in absolute mode)
-        swap-xy;
-        invert-x;
+        data-mode = "relative";
     };
 };
 
