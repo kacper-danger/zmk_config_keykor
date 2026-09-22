@@ -34,8 +34,7 @@
 //   SCK D21 = P0.31, SI/MOSI D20 = P0.29, SO/MISO D19 = P0.02
 //   SS D18 and DR D15 are set below with &pro_micro 18 / &pro_micro 15 (P1.15 / P1.13)
 &pinctrl {
-    // New labels (not the board's spi1_default) so this does not depend on the board's pinctrl names
-    trackpad_spi_default: trackpad_spi_default {
+    spi1_default: spi1_default {
         group1 {
             psels = <NRF_PSEL(SPIM_SCK, 0, 31)>,
                     <NRF_PSEL(SPIM_MOSI, 0, 29)>,
@@ -43,7 +42,7 @@
         };
     };
 
-    trackpad_spi_sleep: trackpad_spi_sleep {
+    spi1_sleep: spi1_sleep {
         group1 {
             psels = <NRF_PSEL(SPIM_SCK, 0, 31)>,
                     <NRF_PSEL(SPIM_MOSI, 0, 29)>,
@@ -56,17 +55,17 @@
 &spi1 {
     status = "okay";
     compatible = "nordic,nrf-spim";
-    pinctrl-0 = <&trackpad_spi_default>;
-    pinctrl-1 = <&trackpad_spi_sleep>;
+    pinctrl-0 = <&spi1_default>;
+    pinctrl-1 = <&spi1_sleep>;
     pinctrl-names = "default", "sleep";
     cs-gpios = <&pro_micro 18 GPIO_ACTIVE_LOW>;
 
     trackpad: trackpad@0 {
-        compatible = "cirque,pinnacle";   // Zephyr's in-tree driver (SPI supported)
+        compatible = "cirque,pinnacle";
         reg = <0>;
         spi-max-frequency = <1000000>;
         status = "okay";
-        data-ready-gpios = <&pro_micro 15 GPIO_ACTIVE_HIGH>;
+        dr-gpios = <&pro_micro 15 GPIO_ACTIVE_HIGH>;
     };
 };
 
